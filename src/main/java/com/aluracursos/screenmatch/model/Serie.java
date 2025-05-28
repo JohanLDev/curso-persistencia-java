@@ -1,5 +1,7 @@
 package com.aluracursos.screenmatch.model;
 
+import com.aluracursos.screenmatch.service.ConsultaChatGPT;
+import com.aluracursos.screenmatch.service.Gemini;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jdk.jfr.Category;
 
@@ -17,10 +19,81 @@ public class Serie {
     public Serie (DatosSerie datosSerie){
         this.titulo = datosSerie.titulo();
         this.totalTemporadas = datosSerie.totalTemporadas();
-        this.evaluacion = OptionalDouble.of(Double.valueOf(datosSerie.evaluacion())).orElse(0);
+        try {
+            this.evaluacion = Double.valueOf(datosSerie.evaluacion());
+        } catch (NumberFormatException e) {
+            this.evaluacion = 0.0;
+        }
         this.poster = datosSerie.poster();
-        this.genero = Categoria.fromString(datosSerie.genero());
+        this.genero = Categoria.fromString(datosSerie.genero().split(",")[0].trim()); // Split crea un array por cada separador
         this.actores = datosSerie.actores();
         this.sinopsis = datosSerie.sinopsis();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Integer getTotalTemporadas() {
+        return totalTemporadas;
+    }
+
+    public void setTotalTemporadas(Integer totalTemporadas) {
+        this.totalTemporadas = totalTemporadas;
+    }
+
+    public Double getEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(Double evaluacion) {
+        this.evaluacion = evaluacion;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public Categoria getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Categoria genero) {
+        this.genero = genero;
+    }
+
+    public String getActores() {
+        return actores;
+    }
+
+    public void setActores(String actores) {
+        this.actores = actores;
+    }
+
+    public String getSinopsis() {
+        return sinopsis;
+    }
+
+    public void setSinopsis(String sinopsis) {
+        this.sinopsis = sinopsis;
+    }
+
+    @Override
+    public String toString() {
+        return  " genero=" + genero +
+                ", titulo='" + titulo + '\'' +
+                ", totalTemporadas=" + totalTemporadas +
+                ", evaluacion=" + evaluacion +
+                ", poster='" + poster + '\'' +
+                ", actores='" + actores + '\'' +
+                ", sinopsis='" + sinopsis;
     }
 }
