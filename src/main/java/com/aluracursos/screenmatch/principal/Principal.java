@@ -3,6 +3,7 @@ package com.aluracursos.screenmatch.principal;
 import com.aluracursos.screenmatch.model.DatosSerie;
 import com.aluracursos.screenmatch.model.DatosTemporadas;
 import com.aluracursos.screenmatch.model.Serie;
+import com.aluracursos.screenmatch.repository.SerieRepository;
 import com.aluracursos.screenmatch.service.ConsultaChatGPT;
 import com.aluracursos.screenmatch.service.ConsumoAPI;
 import com.aluracursos.screenmatch.service.ConvierteDatos;
@@ -21,8 +22,16 @@ public class Principal {
 
     private List<DatosSerie> datosSeries = new ArrayList<>();
 
+    private SerieRepository serieRepository;
+
+    public Principal(SerieRepository repository) {
+        this.serieRepository = repository;
+    }
+
 
     public void muestraElMenu() {
+
+
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
@@ -79,17 +88,15 @@ public class Principal {
     }
     private void buscarSerieWeb() {
         DatosSerie datos = getDatosSerie();
-        datosSeries.add(datos);
+        //datosSeries.add(datos);
+        Serie serie = new Serie(datos);
+        serieRepository.save(serie);
         System.out.println(datos);
     }
 
     private void mostrarSeriesBuscadas(){
 
-        List<Serie> series = new ArrayList<>();
-
-        series = datosSeries.stream().
-                map(d -> new Serie(d)).
-                collect(Collectors.toList());
+        List<Serie> series = serieRepository.findAll();
 
         // Ordenar por genero e imprimir
         series.stream().

@@ -3,6 +3,8 @@ package com.aluracursos.screenmatch.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "series")
 public class Serie {
@@ -13,8 +15,6 @@ public class Serie {
 
     @Column(unique = true)
     private String titulo;
-
-
     private Integer totalTemporadas;
     private Double evaluacion;
     private String poster;
@@ -23,6 +23,11 @@ public class Serie {
     private Categoria genero;
     private String actores;
     private String sinopsis;
+
+    @Transient
+    private List<Episodio> episodios;
+
+    public Serie() {}
 
     public Serie (DatosSerie datosSerie){
         this.titulo = datosSerie.titulo();
