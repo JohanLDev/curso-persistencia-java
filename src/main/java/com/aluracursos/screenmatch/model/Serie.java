@@ -24,7 +24,11 @@ public class Serie {
     private String actores;
     private String sinopsis;
 
-    @Transient
+    // cascade = para indicar que si la entidad episodio tiene un cambio, la serie debe conocer este cambio también.
+    // fetch = en este caso es para el tipo de busqueda, eager quiere decir que es una busqueda ansiosa, que obtendrá
+    // todo.
+
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios;
 
     public Serie() {}
@@ -43,6 +47,14 @@ public class Serie {
         this.sinopsis = datosSerie.sinopsis();
     }
 
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
+    }
 
     public Long getId() {
         return id;
@@ -110,12 +122,16 @@ public class Serie {
 
     @Override
     public String toString() {
-        return  " genero=" + genero +
+        return "Serie{" +
+                "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", totalTemporadas=" + totalTemporadas +
                 ", evaluacion=" + evaluacion +
                 ", poster='" + poster + '\'' +
+                ", genero=" + genero +
                 ", actores='" + actores + '\'' +
-                ", sinopsis='" + sinopsis;
+                ", sinopsis='" + sinopsis + '\'' +
+                ", episodios=" + episodios +
+                '}';
     }
 }

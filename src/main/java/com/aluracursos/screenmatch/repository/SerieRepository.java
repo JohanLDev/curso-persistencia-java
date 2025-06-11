@@ -3,6 +3,14 @@ package com.aluracursos.screenmatch.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.aluracursos.screenmatch.model.Serie;
 
+import java.util.Optional;
+import java.util.List;
+
 public interface SerieRepository extends JpaRepository<Serie,Long> {
+
+    // Este nombramiento del método no es al azar, si no más bien es que JPA nos permite hacer consulta así.
+    Optional<Serie> findByTituloContainsIgnoreCase(String nombreSerie);
+
+    List<Serie> findTop5ByOrderByEvaluacionDesc();
 
 }

@@ -1,14 +1,31 @@
 package com.aluracursos.screenmatch.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@Entity
+@Table(name = "episodios")
 public class Episodio {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // generacion automatica
+    private Long id;
+
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
     private Double evaluacion;
     private LocalDate fechaDeLanzamiento;
+
+    @ManyToOne
+    private Serie serie;
+
+    // Constructor vació para las entidades.
+    public Episodio() {
+
+    }
 
     public Episodio(Integer numero, DatosEpisodio d) {
         this.temporada = numero;
@@ -25,6 +42,27 @@ public class Episodio {
             this.fechaDeLanzamiento = null;
         }
 
+    }
+
+    public void addSerie(Serie serie){
+        this.serie = serie;
+        serie.getEpisodios().add(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 
     public Integer getTemporada() {
